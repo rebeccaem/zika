@@ -14,7 +14,7 @@ burnin = 100;
 #inad_type = int(info[6])
 
 n_s = 7
-var = 100
+var = 1000
 n_weeks = 52
 dim = n_s + 1
 

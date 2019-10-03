@@ -38,13 +38,13 @@ state[0] = data[0,1]
 for i in range(1,len(state)):
     state[i] = state[i-1] + data[i,1];
 
-print(state)
+#print(state)
 
 dataFile = "../inputs/data-red.txt"
 data = loadtxt(dataFile,comments="%")
 red = data[7:417:8,2]
-print(red)
-print(red.shape)
+#print(red)
+#print(red.shape)
 
 dataFile = "qoi-stats"
 q = loadtxt(dataFile,comments="%")
@@ -67,9 +67,9 @@ for j in range(0,n_weeks):
   r4.append(q[j*dim+7,4])
 
 plt.figure()
-#plt.fill_between(times,r2,r3,facecolor='blue',alpha=.3)
-#plt.fill_between(times,r1,r4,facecolor='blue',alpha=.1)
-#plt.plot(times,rmean,'b',linewidth=2,label='Enriched model')
+plt.fill_between(times,r2,r3,facecolor='blue',alpha=.3)
+plt.fill_between(times,r1,r4,facecolor='blue',alpha=.1)
+plt.plot(times,rmean,'b',linewidth=2,label='Enriched model')
 plt.plot(times,state,'r^',markersize=7,label='Data')
 # print(datatimes)
 # print(times)
@@ -89,7 +89,7 @@ plt.ylabel('Number of people')
 plt.locator_params(nbins=5)
 plt.legend(loc=0)
 # plt.show()
-plt.savefig('/users/rebeccam/Documents/talks/2019/rawfigs/zika-red.pdf')
+#plt.savefig('/users/rebeccam/Documents/talks/2019/rawfigs/zika-red.pdf')
 # plt.savefig('red-plots/smooth-'
 #         '%s' '-' '%s''.pdf' %(k,i))
 # plt.savefig('red-plots/smooth-pred-'
