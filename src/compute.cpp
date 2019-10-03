@@ -64,7 +64,7 @@ void computeParams(const QUESO::FullEnvironment& env) {
   // SIP Step 0 of 6: Read in the data
   //------------------------------------------------------
   unsigned int n_s;  //number of species in model
-  double var = 100;            //variance in the data
+  double var = 1000;            //variance in the data
   unsigned int inad_type = 1;  //type of inadequacy model
 
   //read in info file
