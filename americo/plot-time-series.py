@@ -29,14 +29,17 @@ dim = n_s +1
 n_weeks = 52
 
 dataFile = "AMC_dataC.txt"
-data = loadtxt(dataFile,comments="%")
+data = loadtxt(dataFile,delimiter=",",comments="%")
 print(data)
 print(data.shape)
 times = np.linspace(1,52,52,endpoint=True)
 state = np.linspace(1,52,52,endpoint=True)
-state[0] = data[0,1]
+mod_state = np.linspace(1,52,52,endpoint=True)
+reporting_factor = 1.1
 for i in range(1,len(state)):
-    state[i] = state[i-1] + data[i,1];
+   # state[i] = state[i-1] + data[i];
+    state[i] = data[i];
+  #  mod_state[i] = state[i]*reporting_factor
 
 #print(state)
 
@@ -47,7 +50,7 @@ red = data[7:417:8,2]
 #print(red.shape)
 
 plt.figure()
-plt.plot(times,rmean,'b',linewidth=2,label='Enriched model')
+plt.plot(times,red,'b',linewidth=2,label='Reduced model')
 plt.plot(times,state,'r^',markersize=7,label='Data')
 # print(datatimes)
 # print(times)
