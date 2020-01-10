@@ -64,7 +64,7 @@ void computeParams(const QUESO::FullEnvironment& env) {
   // SIP Step 0 of 6: Read in the data
   //------------------------------------------------------
   unsigned int n_s;  //number of species in model
-  double var = 1000;            //variance in the data
+  double var = 4000;            //variance in the data
   unsigned int inad_type = 1;  //type of inadequacy model
 
   //read in info file
@@ -107,9 +107,11 @@ void computeParams(const QUESO::FullEnvironment& env) {
   std::vector<double> weeks(n_weeks, 0.);
   std::vector<double> new_cases(n_weeks, 0.);
   std::vector<double> initialValues(dim, 0.);
+  double rep_factor = 1.5;
   while (fscanf(dataFile,"%lf %lf ", &tmpWeeks, &tmpx) != EOF) {
     weeks[numLines]    = tmpWeeks;
-    new_cases[numLines]     = tmpx;
+    //add 10% for under-reporting
+    new_cases[numLines]     = rep_factor * tmpx;
     numLines++;
   }
   std::vector<double> cum_sum_cases(n_weeks, 0.);

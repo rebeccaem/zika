@@ -1,2 +1,7 @@
 build/*.o
 bin/*
+
+outputData/*
+postprocessing/*.dat
+postprocessing/*.m
+postprocessing/qoi-stats

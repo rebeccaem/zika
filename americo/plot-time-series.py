@@ -8,7 +8,7 @@ from operator import add
 from operator import sub
 
 rc('text',usetex=True)
-font={'family' : 'normal',
+font={'family' : 'serif',
     'weight' : 'normal',
     'size' :14}
 matplotlib.rc('font',**font)
@@ -87,14 +87,23 @@ for j in range(0,n_weeks):
   r3.append(q[j*dim+7,3])
   r4.append(q[j*dim+7,4])
 
+s1 = []; s2 = []; s3 = []; s4 = [];
+for j in range(0,n_weeks):
+  s1.append(0.95*q[j*dim+7,0])
+  s2.append(0.975*q[j*dim+7,0])
+  s3.append(1.025*q[j*dim+7,0])
+  s4.append(1.05*q[j*dim+7,0])
+
 plt.figure()
-plt.plot(times,state,'^',markersize=7,label='Data')
-plt.plot(times,nom,linewidth=2,label='Reduced model')
-plt.plot(times,cal1,linewidth=2,label='Cal1 model')
-plt.plot(times,cal2,linewidth=2,label='Cal2 model')
-plt.plot(times,rmean,linewidth=2,label='Enriched model')
-plt.fill_between(times,r2,r3,facecolor='blue',alpha=.3)
-plt.fill_between(times,r1,r4,facecolor='blue',alpha=.1)
+plt.plot(times,state,'^',markersize=7,color='C0',label='Data')
+#plt.plot(times,nom,linewidth=2,color='C1',label='Reduced model, nominal parameters')
+#plt.plot(times,cal1,linewidth=2,color='C2',label='Reduced model, first calibration')
+#plt.plot(times,cal2,linewidth=2,color='C4',label='Reduced model, second calibration')
+plt.plot(times,rmean,linewidth=2,color='C3',label='Enriched model')
+#plt.fill_between(times,r2,r3,facecolor='C3',alpha=.3)
+#plt.fill_between(times,r1,r4,facecolor='C3',alpha=.1)
+plt.fill_between(times,s2,s3,facecolor='C3',alpha=.3)
+plt.fill_between(times,s1,s4,facecolor='C3',alpha=.1)
 # print(datatimes)
 # print(times)
 #red = interp1d(datatimes,state_red)
@@ -103,6 +112,7 @@ plt.fill_between(times,r1,r4,facecolor='blue',alpha=.1)
 
 plt.xlabel('Weeks')
 plt.ylabel('Cummulative number of cases')
+plt.ticklabel_format(axis='y',style='sci',scilimits=(3,0))
 #if k < n_phis_cal:
  # plt.title('Calibration scenario '+str(k+1)+' of '+str(n_phis_cal))
 #else:
@@ -110,10 +120,10 @@ plt.ylabel('Cummulative number of cases')
 
 #plt.ylabel('$x_{}$'.format(i+1),fontsize=28)
 #plt.xlim(times[0],times[-1])
-plt.locator_params(nbins=5)
+plt.locator_params(nbins=10)
 plt.legend(loc=0)
 # plt.show()
-#plt.savefig('/users/rebeccam/Documents/talks/2019/rawfigs/zika-red.pdf')
+plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep.pdf')
 # plt.savefig('red-plots/smooth-'
 #         '%s' '-' '%s''.pdf' %(k,i))
 # plt.savefig('red-plots/smooth-pred-'

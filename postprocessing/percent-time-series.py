@@ -8,7 +8,7 @@ from operator import add
 from operator import sub
 
 rc('text',usetex=True)
-font={'family' : 'normal',
+font={'family' : 'serif',
     'weight' : 'normal',
     'size' :14}
 matplotlib.rc('font',**font)
@@ -23,7 +23,7 @@ matplotlib.rc('font',**font)
 #var = int(info[5])
 #inad_type = int(info[6])
 
-var = 100
+var = 10000
 n_s = 7
 dim = n_s +1
 n_weeks = 52
@@ -34,9 +34,10 @@ print(data)
 print(data.shape)
 times = np.linspace(1,52,52,endpoint=True)
 state = np.linspace(1,52,52,endpoint=True)
-state[0] = data[0,1]
+rep_factor = 1.5;
+state[0] = rep_factor* data[0,1]
 for i in range(1,len(state)):
-    state[i] = state[i-1] + data[i,1];
+    state[i] = state[i-1] + rep_factor * data[i,1];
 
 #print(state)
 
@@ -67,18 +68,19 @@ for j in range(0,n_weeks):
   r4.append(q[j*dim+7,4])
 
 plt.figure()
+plt.plot(times,state,'^',color='C0',markersize=7,label='Data')
 plt.fill_between(times,r2,r3,facecolor='blue',alpha=.3)
 plt.fill_between(times,r1,r4,facecolor='blue',alpha=.1)
-plt.plot(times,rmean,'b',linewidth=2,label='Enriched model')
-plt.plot(times,state,'r^',markersize=7,label='Data')
+plt.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # print(datatimes)
 # print(times)
 #red = interp1d(datatimes,state_red)
 #plt.plot(times,red(times),'g', linewidth=2,label='Reduced model')
-plt.plot(times,red,'g', linewidth=2,label='Reduced model')
+#plt.plot(times,red, linewidth=2,label='Reduced model')
 
 plt.xlabel('Weeks')
-plt.ylabel('Number of people')
+plt.ylabel('Cummulative number of cases')
+plt.ticklabel_format(axis='y',style='sci',scilimits=(3,0))
 #if k < n_phis_cal:
  # plt.title('Calibration scenario '+str(k+1)+' of '+str(n_phis_cal))
 #else:
@@ -86,10 +88,10 @@ plt.ylabel('Number of people')
 
 #plt.ylabel('$x_{}$'.format(i+1),fontsize=28)
 #plt.xlim(times[0],times[-1])
-plt.locator_params(nbins=5)
+plt.locator_params(nbins=10)
 plt.legend(loc=0)
 # plt.show()
-#plt.savefig('/users/rebeccam/Documents/talks/2019/rawfigs/zika-red.pdf')
+plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep1p5.pdf')
 # plt.savefig('red-plots/smooth-'
 #         '%s' '-' '%s''.pdf' %(k,i))
 # plt.savefig('red-plots/smooth-pred-'

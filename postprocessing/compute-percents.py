@@ -14,7 +14,7 @@ burnin = 100;
 #inad_type = int(info[6])
 
 n_s = 7
-var = 1000
+var = 4000
 n_weeks = 52
 dim = n_s + 1
 
@@ -30,6 +30,8 @@ sigma = np.sqrt(var)
 filename = 'qoi-stats';
 file = open(filename,'w')
 
+print(q.shape)
+print(range(q.shape[0]))
 for i in range(n_weeks*dim):
     # (a, b) = divmod(i,n_s)
     # j = a*n_s + b
@@ -39,7 +41,7 @@ for i in range(n_weeks*dim):
       mu = q[j,i];
       f.extend(np.random.normal(mu,sigma,100));
     # n, bins = np.histogram(q[:,i], bins = 200, normed = True)  #1.0*np.sqrt(len(q[:,i])))
-    n, bins = np.histogram(f, bins = 200, normed = True)  #1.0*np.sqrt(len(q[:,i])))
+    n, bins = np.histogram(f, bins = 200, density = True)#, normed = True)  #1.0*np.sqrt(len(q[:,i])))
     nn = np.cumsum(n*(bins[1]-bins[0]))
     q0 = max((bins[np.argmax(nn>.5)] + bins[np.argmax(nn>.5) +1])/2,0)
     q1 = max((bins[np.argmax(nn>.025)] + bins[np.argmax(nn>.025) +1])/2,0)
