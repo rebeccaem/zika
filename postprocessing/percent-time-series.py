@@ -23,7 +23,7 @@ matplotlib.rc('font',**font)
 #var = int(info[5])
 #inad_type = int(info[6])
 
-var = 10000
+# var = 4000
 n_s = 7
 dim = n_s +1
 n_weeks = 52
@@ -34,7 +34,7 @@ print(data)
 print(data.shape)
 times = np.linspace(1,52,52,endpoint=True)
 state = np.linspace(1,52,52,endpoint=True)
-rep_factor = 1.5;
+rep_factor = 1.0#10./9;
 state[0] = rep_factor* data[0,1]
 for i in range(1,len(state)):
     state[i] = state[i-1] + rep_factor * data[i,1];
@@ -53,7 +53,7 @@ q = loadtxt(dataFile,comments="%")
 # spec_names = ('H$_2$', 'O$_2$', 'H', 'O', 'OH', 'HO$_2$', 'H$_2$O', 'H$_2$O$_2$',
 #     'N$_2$', 'Temperature')
 
-sigma = np.sqrt(var)
+# sigma = np.sqrt(var)
 # err = np.random.normal(0,sigma,n_times)
 # state = state + err
 # state[np.where(state<0)] = 0
@@ -68,9 +68,9 @@ for j in range(0,n_weeks):
   r4.append(q[j*dim+7,4])
 
 plt.figure()
-plt.plot(times,state,'^',color='C0',markersize=7,label='Data')
-plt.fill_between(times,r2,r3,facecolor='blue',alpha=.3)
-plt.fill_between(times,r1,r4,facecolor='blue',alpha=.1)
+plt.plot(times,state,'^',color='C0',markersize=7,label='Data')#, with 50\% under-reporting')
+plt.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
+plt.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
 plt.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # print(datatimes)
 # print(times)
@@ -91,7 +91,7 @@ plt.ticklabel_format(axis='y',style='sci',scilimits=(3,0))
 plt.locator_params(nbins=10)
 plt.legend(loc=0)
 # plt.show()
-plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep1p5.pdf')
+plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-enr.pdf')
 # plt.savefig('red-plots/smooth-'
 #         '%s' '-' '%s''.pdf' %(k,i))
 # plt.savefig('red-plots/smooth-pred-'
