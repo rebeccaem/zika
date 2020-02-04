@@ -6,11 +6,13 @@ from numpy import loadtxt
 from scipy.interpolate import interp1d
 from operator import add
 from operator import sub
+from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes
+
 
 rc('text',usetex=True)
 font={'family' : 'serif',
     'weight' : 'normal',
-    'size' :14}
+    'size' :16}
 matplotlib.rc('font',**font)
 
 #dataFile = "../inputs/info.txt"
@@ -28,13 +30,13 @@ n_s = 7
 dim = n_s +1
 n_weeks = 52
 
-dataFile = "../inputs/data.txt"
-data = loadtxt(dataFile,comments="%")
+dataFile = "../inputs/data.txt"; data = loadtxt(dataFile,comments="%")
 print(data)
 print(data.shape)
 times = np.linspace(1,52,52,endpoint=True)
 state = np.linspace(1,52,52,endpoint=True)
-rep_factor = 1.0#10./9;
+#rep_factor = 10./9;
+rep_factor = 2.;
 state[0] = rep_factor* data[0,1]
 for i in range(1,len(state)):
     state[i] = state[i-1] + rep_factor * data[i,1];
@@ -67,20 +69,23 @@ for j in range(0,n_weeks):
   r3.append(q[j*dim+7,3])
   r4.append(q[j*dim+7,4])
 
-plt.figure()
-plt.plot(times,state,'^',color='C0',markersize=7,label='Data')#, with 50\% under-reporting')
-plt.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
-plt.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
-plt.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
+fig, ax = plt.subplots()
+#ax.plot(times,state,'^',color='C0',markersize=7,label='Data')
+ax.plot(times,state,'^',color='C0',markersize=7,label='Modified data, with 10\% under-reporting')
+ax.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
+ax.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
+ax.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # print(datatimes)
 # print(times)
 #red = interp1d(datatimes,state_red)
 #plt.plot(times,red(times),'g', linewidth=2,label='Reduced model')
 #plt.plot(times,red, linewidth=2,label='Reduced model')
 
-plt.xlabel('Weeks')
+
+plt.xlabel('Epidemiological week')
 plt.ylabel('Cummulative number of cases')
 plt.ticklabel_format(axis='y',style='sci',scilimits=(3,0))
+plt.tight_layout()
 #if k < n_phis_cal:
  # plt.title('Calibration scenario '+str(k+1)+' of '+str(n_phis_cal))
 #else:
@@ -88,13 +93,31 @@ plt.ticklabel_format(axis='y',style='sci',scilimits=(3,0))
 
 #plt.ylabel('$x_{}$'.format(i+1),fontsize=28)
 #plt.xlim(times[0],times[-1])
-plt.locator_params(nbins=10)
-plt.legend(loc=0)
+ax.locator_params(nbins=10)
+ax.legend(loc=0)
 # plt.show()
-plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-enr.pdf')
 # plt.savefig('red-plots/smooth-'
 #         '%s' '-' '%s''.pdf' %(k,i))
 # plt.savefig('red-plots/smooth-pred-'
 #        '%s' '-' '%s''.pdf' %(k,i))
 
+
+# ZOOM
+axins = zoomed_inset_axes(ax,1.4, loc='center right')
+# replot what we need for zoom
+axins.plot(times,state,'^',color='C0',markersize=7,label='Data')#, with 50\% under-reporting')
+axins.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
+axins.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
+axins.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
+# set zoom limits
+x1, x2, y1, y2 = 12, 30, 320000, 550000
+axins.set_xlim(x1, x2)
+axins.set_ylim(y1, y2)
+plt.xticks(visible=False)
+plt.yticks(visible=False)
+
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+mark_inset(ax, axins, loc1=1, loc2=3, fc="none", ec="0.5")
+
+plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep50p.pdf')
 plt.show()

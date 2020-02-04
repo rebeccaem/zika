@@ -125,37 +125,31 @@ plt.tight_layout()
 ax.locator_params(nbins=10)
 ax.legend(loc=0)
 # plt.show()
-#plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-enr.pdf')
 
 
-# ZOOM IN ON SECOND PLOT
+
+# ZOOM
+axins = zoomed_inset_axes(ax,1.4, loc='center right')
 # replot what we need for zoom
-fig2, ax2 = plt.subplots()
-ax2.plot(times,state,'^',color='C0',markersize=7,label='Data')#, with 50\% under-reporting')
-ax2.plot(times,nom,linewidth=2,color='C1',label='Reduced model, nominal parameters')
-ax2.plot(times,cal1,linewidth=2,color='C2',label='Reduced model, first calibration')
-ax2.plot(times,cal2,linewidth=2,color='C4',label='Reduced model, second calibration')
-#ax2.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
-#ax2.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
-ax2.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
+axins.plot(times,state,'^',color='C0',markersize=7,label='Data')#, with 50\% under-reporting')
+axins.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
+axins.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
+axins.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # set zoom limits
 x1, x2, y1, y2 = 12, 30, 150000, 275000
-ax2.set_xlim(x1, x2)
-ax2.set_ylim(y1, y2)
-ax2.locator_params(nbins=10)
-ax2.legend(loc=0)
-#plt.xticks(visible=False)
-#plt.yticks(visible=False)
-plt.xlabel('Epidemiological week')
-plt.ylabel('Cummulative number of cases')
-plt.ticklabel_format(axis='y',style='sci',scilimits=(3,0))
-plt.tight_layout()
-plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-all-zoom.pdf')
+axins.set_xlim(x1, x2)
+axins.set_ylim(y1, y2)
+plt.xticks(visible=False)
+plt.yticks(visible=False)
+
+from mpl_toolkits.axes_grid1.inset_locator import mark_inset
+mark_inset(ax, axins, loc1=1, loc2=3, fc="none", ec="0.5")
 
 
 
 
 
+plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-enr.pdf')
 # plt.savefig('red-plots/smooth-'
 #         '%s' '-' '%s''.pdf' %(k,i))
 # plt.savefig('red-plots/smooth-pred-'

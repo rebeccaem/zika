@@ -108,8 +108,8 @@ void computeParams(const QUESO::FullEnvironment& env) {
   std::vector<double> new_cases(n_weeks, 0.);
   std::vector<double> initialValues(dim, 0.);
   //double rep_factor = 10./9; // 10% under-reporting
-  //double rep_factor = 2.0;     // 50% under-reporting
-  double rep_factor = 1.0;     // no under-reporting
+  double rep_factor = 2.0;     // 50% under-reporting
+  //double rep_factor = 1.0;     // no under-reporting
   while (fscanf(dataFile,"%lf %lf ", &tmpWeeks, &tmpx) != EOF) {
     weeks[numLines]    = tmpWeeks;
     //add 10% for under-reporting
@@ -130,7 +130,7 @@ void computeParams(const QUESO::FullEnvironment& env) {
   //S_h, E_h, I_h, R_h, S_v E_v, I_v, C
   double nh = 206 * pow(10,6);
   double nv = 1;
-  double ci = 8201.0;
+  double ci = rep_factor * 8201.0;
   double ehi = ci;
   double ihi = ci;
   double rhi = 29639.0;
