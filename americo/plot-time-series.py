@@ -68,7 +68,7 @@ print(data.shape)
 #pick out every 7th day
 cal2 = data[0:417:7]
 
-dataFile = "../postprocessing/qoi-stats-enr"
+dataFile = "qoi-stats-enr"
 q = loadtxt(dataFile,comments="%")
 
 # spec_names = ('H$_2$', 'O$_2$', 'H', 'O', 'OH', 'HO$_2$', 'H$_2$O', 'H$_2$O$_2$',
@@ -143,14 +143,14 @@ x1, x2, y1, y2 = 12, 30, 150000, 275000
 ax2.set_xlim(x1, x2)
 ax2.set_ylim(y1, y2)
 ax2.locator_params(nbins=10)
-ax2.legend(loc=0)
+#ax2.legend(loc=0)
 #plt.xticks(visible=False)
 #plt.yticks(visible=False)
 plt.xlabel('Epidemiological week')
 plt.ylabel('Cummulative number of cases')
 plt.ticklabel_format(axis='y',style='sci',scilimits=(3,0))
 plt.tight_layout()
-plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-all-zoom.pdf')
+plt.savefig('/users/rem/repos/documents/papers/zika-discrepancy/rawfigs/zika-all-zoom.pdf')
 
 
 
