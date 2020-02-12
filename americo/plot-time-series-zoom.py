@@ -68,7 +68,7 @@ print(data.shape)
 #pick out every 7th day
 cal2 = data[0:417:7]
 
-dataFile = "../postprocessing/qoi-stats-enr"
+dataFile = "qoi-stats-rep10p"
 q = loadtxt(dataFile,comments="%")
 
 # spec_names = ('H$_2$', 'O$_2$', 'H', 'O', 'OH', 'HO$_2$', 'H$_2$O', 'H$_2$O$_2$',
@@ -96,13 +96,14 @@ for j in range(0,n_weeks):
   s4.append(1.05*q[j*dim+7,0])
 
 fig, ax = plt.subplots()
-ax.plot(times,state,'^',markersize=7,color='C0',label='Data')
+#ax.plot(times,state,'^',markersize=7,color='C0',label='Data')
+ax.plot(times,state,'^',markersize=7,color='C0',label='Modified data, with 10\% under-reporting')
 #ax.plot(times,nom,linewidth=2,color='C1',label='Reduced model, nominal parameters')
 #ax.plot(times,cal1,linewidth=2,color='C2',label='Reduced model, first calibration')
 #ax.plot(times,cal2,linewidth=2,color='C4',label='Reduced model, second calibration')
 ax.plot(times,rmean,linewidth=2,color='C3',label='Enriched model')
-ax.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
-ax.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
+ax.fill_between(times,r2,r3,facecolor='C3',alpha=.4)
+ax.fill_between(times,r1,r4,facecolor='C3',alpha=.1)
 #plt.fill_between(times,s2,s3,facecolor='C3',alpha=.3)
 #plt.fill_between(times,s1,s4,facecolor='C3',alpha=.1)
 # print(datatimes)
@@ -132,8 +133,8 @@ ax.legend(loc=0)
 axins = zoomed_inset_axes(ax,1.4, loc='center right')
 # replot what we need for zoom
 axins.plot(times,state,'^',color='C0',markersize=7,label='Data')#, with 50\% under-reporting')
-axins.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
-axins.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
+axins.fill_between(times,r2,r3,facecolor='C3',alpha=.4)
+axins.fill_between(times,r1,r4,facecolor='C3',alpha=.1)
 axins.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # set zoom limits
 x1, x2, y1, y2 = 12, 30, 150000, 275000
@@ -149,7 +150,7 @@ mark_inset(ax, axins, loc1=1, loc2=3, fc="none", ec="0.5")
 
 
 
-plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-enr.pdf')
+plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep10p.pdf')
 # plt.savefig('red-plots/smooth-'
 #         '%s' '-' '%s''.pdf' %(k,i))
 # plt.savefig('red-plots/smooth-pred-'

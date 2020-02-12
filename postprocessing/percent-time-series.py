@@ -49,7 +49,7 @@ red = data[7:417:8,2]
 #print(red)
 #print(red.shape)
 
-dataFile = "qoi-stats"
+dataFile = "qoi-stats-rep50p"
 q = loadtxt(dataFile,comments="%")
 
 # spec_names = ('H$_2$', 'O$_2$', 'H', 'O', 'OH', 'HO$_2$', 'H$_2$O', 'H$_2$O$_2$',
@@ -71,9 +71,9 @@ for j in range(0,n_weeks):
 
 fig, ax = plt.subplots()
 #ax.plot(times,state,'^',color='C0',markersize=7,label='Data')
-ax.plot(times,state,'^',color='C0',markersize=7,label='Modified data, with 10\% under-reporting')
-ax.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
-ax.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
+ax.plot(times,state,'^',color='C0',markersize=7,label='Modified data, with 50\% under-reporting')
+ax.fill_between(times,r2,r3,facecolor='C3',alpha=.4)
+ax.fill_between(times,r1,r4,facecolor='C3',alpha=.1)
 ax.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # print(datatimes)
 # print(times)
@@ -106,10 +106,11 @@ ax.legend(loc=0)
 axins = zoomed_inset_axes(ax,1.4, loc='center right')
 # replot what we need for zoom
 axins.plot(times,state,'^',color='C0',markersize=7,label='Data')#, with 50\% under-reporting')
-axins.fill_between(times,r2,r3,facecolor='C3',alpha=.6)
-axins.fill_between(times,r1,r4,facecolor='C3',alpha=.3)
+axins.fill_between(times,r2,r3,facecolor='C3',alpha=.4)
+axins.fill_between(times,r1,r4,facecolor='C3',alpha=.1)
 axins.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # set zoom limits
+#x1, x2, y1, y2 = 12, 30, 175000, 300000
 x1, x2, y1, y2 = 12, 30, 320000, 550000
 axins.set_xlim(x1, x2)
 axins.set_ylim(y1, y2)
