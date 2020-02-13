@@ -8,7 +8,9 @@ Dependencies: QUESO, Eigen
 My Makefile is included for reference.
 
 The steps to run the code are as follows:
+
 rm -r outputData (if already exists)
+
  ./bin/zika_ip inputs/mhInput.inp
 
 To plot the time series results:
