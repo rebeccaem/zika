@@ -29,4 +29,7 @@ You can also run
 ```
 to test the forward model alone.
 
-Can ignore 'americo' and 'data' directories.
+Notes:  
+You can ignore 'americo' and 'data' directories.  
+'rep_factor' is set to 1 within src/compute.cpp, and must be changed by hand with a recompile if needed.  
+In future versions, it should be set as an input that propagates to post-processing, but this is not implemented yet.
