@@ -2,6 +2,8 @@ build/*.o
 bin/*
 
 outputData/*
+outputData*/*
 postprocessing/*.dat
 postprocessing/*.m
-postprocessing/qoi-stats
+postprocessing/qoi-stats*
+americo/qoi-stats*
