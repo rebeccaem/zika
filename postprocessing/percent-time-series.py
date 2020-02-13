@@ -123,4 +123,4 @@ elif rep == 1 & SAVE == 1:
   plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep10p.pdf')
 elif rep == 2 & SAVE == 1:
   plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep50p.pdf')
-#plt.show()
+plt.show()

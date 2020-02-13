@@ -20,8 +20,8 @@ sigma = np.sqrt(var)
 filename = 'qoi-stats';
 file = open(filename,'w')
 
-print(q.shape)
-print(range(q.shape[0]))
+#print(q.shape)
+#print(range(q.shape[0]))
 for i in range(n_weeks*dim):
     # (a, b) = divmod(i,n_s)
     # j = a*n_s + b
