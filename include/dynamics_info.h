@@ -1,5 +1,5 @@
-#ifndef DYNAMICS_INFO_H
-#define DYNAMICS_INFO_H
+#ifndef __DYNAMICS_INFO_H__
+#define __DYNAMICS_INFO_H__
 
 //c++
 #include <vector>
