@@ -15,51 +15,46 @@ font={'family' : 'serif',
     'size' :16}
 matplotlib.rc('font',**font)
 
-#dataFile = "../inputs/info.txt"
-#info = loadtxt(dataFile,comments="%")
-#n_S = int(info[0])
-#n_s = int(info[1])
-#n_phis_cal = int(info[2])
-#n_phis_val = int(info[3])
-#n_times = int(info[4])
-#var = int(info[5])
-#inad_type = int(info[6])
-
-# var = 4000
 n_s = 7
 dim = n_s +1
 n_weeks = 52
+SAVE = 0; #save figures or not
+# load case corresponding to reporting factor
+# 0: no under-rep, 1: 10% under, 2: 50% under
+rep = 0
+if rep == 0:
+  rep_factor = 1.;
+elif rep == 1:
+  rep_factor = 10./9.;
+elif rep == 2:
+  rep_factor = 2.;
 
 dataFile = "../inputs/data.txt"; data = loadtxt(dataFile,comments="%")
-print(data)
-print(data.shape)
+#print(data)
+#print(data.shape)
 times = np.linspace(1,52,52,endpoint=True)
 state = np.linspace(1,52,52,endpoint=True)
-#rep_factor = 10./9;
-rep_factor = 2.;
 state[0] = rep_factor* data[0,1]
 for i in range(1,len(state)):
     state[i] = state[i-1] + rep_factor * data[i,1];
 
 #print(state)
 
+# load reduced model output if needed
 dataFile = "../inputs/data-red.txt"
 data = loadtxt(dataFile,comments="%")
 red = data[7:417:8,2]
 #print(red)
 #print(red.shape)
 
-dataFile = "qoi-stats-rep50p"
+if rep == 0:
+  dataFile = "qoi-stats"
+elif rep == 1:
+  dataFile = "qoi-stats-rep10p"
+elif rep == 2:
+  dataFile = "qoi-stats-rep50p"
 q = loadtxt(dataFile,comments="%")
 
-# spec_names = ('H$_2$', 'O$_2$', 'H', 'O', 'OH', 'HO$_2$', 'H$_2$O', 'H$_2$O$_2$',
-#     'N$_2$', 'Temperature')
-
-# sigma = np.sqrt(var)
-# err = np.random.normal(0,sigma,n_times)
-# state = state + err
-# state[np.where(state<0)] = 0
-# ylabel = ' [mol/m$^3$]'
 rmean = [];
 r1 = []; r2 = []; r3 = []; r4 = [];
 for j in range(0,n_weeks):
@@ -70,8 +65,12 @@ for j in range(0,n_weeks):
   r4.append(q[j*dim+7,4])
 
 fig, ax = plt.subplots()
-#ax.plot(times,state,'^',color='C0',markersize=7,label='Data')
-ax.plot(times,state,'^',color='C0',markersize=7,label='Modified data, with 50\% under-reporting')
+if rep == 0:
+  ax.plot(times,state,'^',color='C0',markersize=7,label='Data')
+elif rep == 1:
+  ax.plot(times,state,'^',color='C0',markersize=7,label='Modified data, with 10\% under-reporting')
+elif rep == 2:
+  ax.plot(times,state,'^',color='C0',markersize=7,label='Modified data, with 50\% under-reporting')
 ax.fill_between(times,r2,r3,facecolor='C3',alpha=.4)
 ax.fill_between(times,r1,r4,facecolor='C3',alpha=.1)
 ax.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
@@ -96,10 +95,6 @@ plt.tight_layout()
 ax.locator_params(nbins=10)
 ax.legend(loc=0)
 # plt.show()
-# plt.savefig('red-plots/smooth-'
-#         '%s' '-' '%s''.pdf' %(k,i))
-# plt.savefig('red-plots/smooth-pred-'
-#        '%s' '-' '%s''.pdf' %(k,i))
 
 
 # ZOOM
@@ -110,8 +105,10 @@ axins.fill_between(times,r2,r3,facecolor='C3',alpha=.4)
 axins.fill_between(times,r1,r4,facecolor='C3',alpha=.1)
 axins.plot(times,rmean,color='C3',linewidth=2,label='Enriched model')
 # set zoom limits
-#x1, x2, y1, y2 = 12, 30, 175000, 300000
-x1, x2, y1, y2 = 12, 30, 320000, 550000
+if rep == 2:
+  x1, x2, y1, y2 = 12, 30, 320000, 550000
+else:
+  x1, x2, y1, y2 = 12, 30, 175000, 300000
 axins.set_xlim(x1, x2)
 axins.set_ylim(y1, y2)
 plt.xticks(visible=False)
@@ -120,5 +117,10 @@ plt.yticks(visible=False)
 from mpl_toolkits.axes_grid1.inset_locator import mark_inset
 mark_inset(ax, axins, loc1=1, loc2=3, fc="none", ec="0.5")
 
-plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep50p.pdf')
+if rep == 0 & SAVE == 1:
+  plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-enr.pdf')
+elif rep == 1 & SAVE == 1:
+  plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep10p.pdf')
+elif rep == 2 & SAVE == 1:
+  plt.savefig('/users/rebeccam/repos/documents/papers/zika-discrepancy/rawfigs/zika-rep50p.pdf')
 plt.show()

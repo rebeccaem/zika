@@ -116,7 +116,6 @@ double likelihoodRoutine(
   double diff = 0.;
 
   /* for (unsigned int i = 0; i < n_params; i++){  dyn->Deltas[i] = -std::exp(paramValues[i]); } */
-  // folded normal
   for (unsigned int i = 0; i < n_params; i++){  
       /* dyn->Deltas[i] = -std::abs(paramValues[i]); */ 
       dyn->Deltas[i] = paramValues[i]; 
@@ -126,7 +125,7 @@ double likelihoodRoutine(
 
   try
      {
-      glvComputeModel(ics,timePoints,dyn,returnValues);
+      zikaComputeModel(ics,timePoints,dyn,returnValues);
 //      std::cout << "Finished compute model" << std::endl;
       for (unsigned int j = 0; j < n_times; j++){
           //only have data for Y[7]

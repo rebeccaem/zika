@@ -26,17 +26,17 @@
  /*------------------------------------------------------------------
  * Brief description of this file: 
  *
- * This is the header file from hydrogen_model.C. 
+ * This is the header file from src/model.cpp 
  *-----------------------------------------------------------------*/
 
-#ifndef __HYDROGEN_MODEL_H__
-#define __HYDROGEN_MODEL_H__
+#ifndef __ZIKA_MODEL_H__
+#define __ZIKA_MODEL_H__
 
 #include "dynamics_info.h"
 #include <vector>
 
 void
-glvComputeModel(
+zikaComputeModel(
   std::vector<double>&  initialValues,
   std::vector<double>&  timePoints,
   dynamics_info*        p_dyn,

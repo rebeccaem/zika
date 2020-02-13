@@ -19,7 +19,7 @@ ip_dataOutputFileName   = outputData/sip
 ip_mh_dataOutputFileName   = outputData/sip
 
 ip_mh_rawChain_dataInputFileName    = . 
-ip_mh_rawChain_size                 = 100000
+ip_mh_rawChain_size                 = 10000
 ip_mh_rawChain_generateExtra        = 0
 ip_mh_rawChain_displayPeriod        = 100
 ip_mh_rawChain_measureRunTimes      = 1

@@ -98,12 +98,11 @@ qoiRoutine(
     timePoints[i] = times[i];
   }
 
-  //return 10 time points of x1
+  //return time points of all state variables + C
   std::vector<double> returnValues(n_times * dim, 0.);
 
-  std::cout << "hello in qoi----------------------------------\n";
+  //std::cout << "hello in qoi----------------------------------\n";
   /* for (unsigned int i = 0; i < n_params; i++){  dyn->Deltas[i] = -std::exp(paramValues[i]); } */
-  //folded normal
   for (unsigned int i = 0; i < n_params; i++){  
       /* dyn->Deltas[i] = -std::abs(paramValues[i]); */
       dyn->Deltas[i] = paramValues[i];
@@ -111,7 +110,7 @@ qoiRoutine(
   /* for (unsigned int i = 0; i < n_params; i++){  dyn->Deltas[i] = 0.; } */
 
   try{
-    glvComputeModel(ics,timePoints,dyn,returnValues);
+    zikaComputeModel(ics,timePoints,dyn,returnValues);
     //std::cout<< "qoi: ret val = " <<  returnValues[7 * 9 + 6] << std::endl; 
     for (unsigned int j = 0; j < returnValues.size(); j++){
       /* std::cout << "i = " << i << " and j = " << j << "\n"; */
@@ -123,9 +122,9 @@ qoiRoutine(
   {
     for (unsigned int j = 0; j < returnValues.size(); j++){
       /* std::cout << "i = " << i << " and j = " << j << "\n"; */
+        //qoiValues same as returnValues here
       qoiValues[j] = returnValues[j];}
     }
 
-// for (unsigned int i = 0; i < 90; i++) qoiValues[i] = i;
   return;
 }

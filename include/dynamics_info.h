@@ -4,7 +4,7 @@
 //c++
 #include <vector>
 
-// define struct that holds all reaction info, except params
+// define struct that holds all dyanamical system info, except params
 struct dynamics_info { dynamics_info(
   const unsigned int & n_s,
   const unsigned int & n_times,

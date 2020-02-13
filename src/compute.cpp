@@ -1,10 +1,9 @@
 /*-------------------------------------------------------------------
  * This file is divided in two parts:
  * - the first one handles the statistical inverse problem (SIP) for estimating
- *   the reaction rates 'k_i', i=1,...,5, where k = A * T^beta * exp(-E/RT)
- *   and the stochastic operator hyperparameters
+ *   the discrepancy parameters '\delta_i', i=1,...,14
  * - the second part handles the statistical forward problem (SFP) for
- *   predicting the QoI which has not yet been defined
+ *   predicting the QoI
  *-----------------------------------------------------------------*/
 /* #include <fstream> */
 #include "compute.h"
@@ -31,7 +30,7 @@ void computeParams(const QUESO::FullEnvironment& env) {
   
   gettimeofday(&timevalNow, NULL);
   if (env.fullRank() == 0) {
-    std::cout << "\nBeginning run of 'GLV plus' example at "
+    std::cout << "\nBeginning run of 'Zika plus discrepancy' example at "
               << ctime(&timevalNow.tv_sec)
               << "\n my fullRank = "         << env.fullRank()
               << "\n my subEnvironmentId = " << env.subId()
@@ -43,7 +42,7 @@ void computeParams(const QUESO::FullEnvironment& env) {
   // Just examples of possible calls
   if ((env.subDisplayFile()       ) && 
       (env.displayVerbosity() >= 2)) {
-    *env.subDisplayFile() << "Beginning run of 'GLV plus' example at "
+    *env.subDisplayFile() << "Beginning run of 'Zika plus discrepancy' example at "
                           << ctime(&timevalNow.tv_sec)
                           << std::endl;
   }
@@ -51,7 +50,7 @@ void computeParams(const QUESO::FullEnvironment& env) {
   env.subComm().Barrier();  // Just an example of a possible call
   
   //================================================================
-  // Statistical inverse problem (SIP): find posterior PDF for k's
+  // Statistical inverse problem (SIP): find posterior PDF for \delta's
   //================================================================
   gettimeofday(&timevalNow, NULL);
   if (env.fullRank() == 0) {
@@ -65,38 +64,33 @@ void computeParams(const QUESO::FullEnvironment& env) {
   //------------------------------------------------------
   unsigned int n_s;  //number of species in model
   double var = 25000000;            //variance in the data
-  unsigned int inad_type = 1;  //type of inadequacy model
+  //type of inadequacy model: right now only one type, might include more later
+  unsigned int inad_type = 1;
 
-  //read in info file
-//  FILE *infoFile;
-//  infoFile = fopen("./inputs/info.txt","r");
-//  if(fscanf(infoFile,"%u %u %u %u %u %lf %u", &n_S, &n_s, &n_phis_cal, &n_phis_val, &n_times, &var, &inad_type)){};
-//  fclose(infoFile);
 
   //number of species in SEIR-SEI model is 7:
   //S_h, E_h, I_h, R_h, S_v, E_v, I_v
   n_s = 7;
   unsigned int dim = n_s + 1;
-//  std::cout << "n_S = " << n_S << "\n";
-//  std::cout << "n_s = " << n_s << "\n";
-//  std::cout << "n_phis_cal = " << n_phis_cal << "\n";
-//  std::cout << "n_phis_val = " << n_phis_val << "\n";
-//  std::cout << "n_times = " << n_times << "\n";
-//  std::cout << "variance = " << var << "\n";
 //  std::cout << "inadequacy type = " << inad_type << "\n\n";
 
-  //TODO!!!! inad_type == 2 is same as 1 but with hyperparameters
+  //inad_type:
+  //0: nothing
+  //1: 2 terms per state variable, linear in state and derivative
+  //STILL TODO!!!! 
+  //2: same as 1 but with hyperparameters for mean and variance
+  //3: quadratic 
   unsigned int params_factor;
   if( inad_type == 0 ) { params_factor = 1;}
   if( inad_type == 1 ) { params_factor = 2;}
   if( inad_type == 2 ) { params_factor = 6;}
   if( inad_type == 3 ) { params_factor = 2 * n_s;}
-  unsigned int n_delta = params_factor*n_s;         //the model inadequacy terms
-  unsigned int n_params = n_delta;      //no hyperparameters, for now //changing way hypers are done
+  unsigned int n_delta = params_factor*n_s;         //the model discrepancy terms
+  unsigned int n_params = n_delta;                  //no other parameters to calibrate
   unsigned int n_weeks = 52;
 
   //read in data points
-  double tmpPhis;
+  double tmpPhis; //number of initial conditions (right now only one)
   double tmpWeeks;
   double tmpx;
   int numLines = 0;
@@ -107,26 +101,29 @@ void computeParams(const QUESO::FullEnvironment& env) {
   std::vector<double> weeks(n_weeks, 0.);
   std::vector<double> new_cases(n_weeks, 0.);
   std::vector<double> initialValues(dim, 0.);
+  // MUST SET BY HAND HERE, should change to input
+  double rep_factor = 1.;    // no under-reporting
   //double rep_factor = 10./9; // 10% under-reporting
-  double rep_factor = 2.0;     // 50% under-reporting
-  //double rep_factor = 1.0;     // no under-reporting
+  //double rep_factor = 2.0;     // 50% under-reporting
   while (fscanf(dataFile,"%lf %lf ", &tmpWeeks, &tmpx) != EOF) {
     weeks[numLines]    = tmpWeeks;
     //add 10% for under-reporting
     new_cases[numLines]     = rep_factor * tmpx;
     numLines++;
   }
+  //count cumulative sum of new cases
   std::vector<double> cum_sum_cases(n_weeks, 0.);
   cum_sum_cases[0] = new_cases[0];
   for (unsigned int i = 1; i < n_weeks; i++){
       cum_sum_cases[i] = cum_sum_cases[i-1] + new_cases[i];
   }
 
-  std::vector<double> times(n_weeks,0.);
+  std::vector<double> times(n_weeks,0.); //convert time from weeks to days
   for (unsigned int i = 0; i < times.size(); i++){
     times[i] = weeks[i] * 7;
   }
 
+  //Set initial values
   //S_h, E_h, I_h, R_h, S_v E_v, I_v, C
   double nh = 206 * pow(10,6);
   double nv = 1;
@@ -164,11 +161,12 @@ void computeParams(const QUESO::FullEnvironment& env) {
   //------------------------------------------------------
   QUESO::GslVector paramMinValues(paramSpace.zeroVector());
   QUESO::GslVector paramMaxValues(paramSpace.zeroVector());
-  //mean of xi
+  //set upper and lower limits for parameters
   for (unsigned int i=0; i<n_params; ++i){
     paramMinValues[i] = -.3;//-INFINITY;
     paramMaxValues[i] = +.15;//INFINITY;
 }
+  //TODO: would need something similar if hyperparameters...
   /* //variance of xi */
   /* for (unsigned int i=n_xi; i<2*n_xi; ++i){ */
   /*   paramMinValues[i] = -INFINITY; */
@@ -182,6 +180,7 @@ void computeParams(const QUESO::FullEnvironment& env) {
   QUESO::BoxSubset<QUESO::GslVector,QUESO::GslMatrix>
     paramDomain("param_", paramSpace, paramMinValues, paramMaxValues);
 
+  // collect information about dynamical system
   dynamics_info dynMain(n_s, n_weeks, inad_type, params_factor, queso_params);
 
   //------------------------------------------------------
@@ -321,12 +320,12 @@ void computeParams(const QUESO::FullEnvironment& env) {
   gettimeofday(&timevalNow, NULL);
   if ((env.subDisplayFile()       ) && 
       (env.displayVerbosity() >= 2)) {
-    *env.subDisplayFile() << "Ending run of 'GLV plus' example at "
+    *env.subDisplayFile() << "Ending run of 'Zika plus discrepancy' example at "
                           << ctime(&timevalNow.tv_sec)
                           << std::endl;
   }
   if (env.fullRank() == 0) {
-    std::cout << "Ending run of 'GLV plus' example at "
+    std::cout << "Ending run of 'Zika plus discrepancy' example at "
               << ctime(&timevalNow.tv_sec)
               << std::endl;
   }

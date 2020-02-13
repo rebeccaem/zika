@@ -26,11 +26,11 @@
  /*------------------------------------------------------------------
  * Brief description of this file: 
  *
- * This is the header file for hydrogen_likelihood.C. 
+ * This is the header file for src/likelihood.cpp. 
  *-----------------------------------------------------------------*/
 
-#ifndef __HYDROGEN_LIKELIHOOD_H__
-#define __HYDROGEN_LIKELIHOOD_H__
+#ifndef __ZIKA_LIKELIHOOD_H__
+#define __ZIKA_LIKELIHOOD_H__
 
 #include "dynamics_info.h"
 #include <queso/GslMatrix.h>

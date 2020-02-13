@@ -1,6 +1,6 @@
 /*-------------------------------------------------------------------
  * Brief description of this file: 
- * testing the model output of the reduced 5 rxn mechanism 
+ * testing the model output of the reduced model
  *-----------------------------------------------------------------*/
 
 #include <fstream>
@@ -83,7 +83,7 @@ int main()
     //return 100 time points of all species and temp
     std::vector<double> returnValues((n_s+1)*timePoints.size(),0.);
 
-    glvComputeModel(initialValues,timePoints,&dynMain,returnValues);
+    zikaComputeModel(initialValues,timePoints,&dynMain,returnValues);
    
     //create measurement error
     //std::normal_distribution<double> distribution(0.0,std::sqrt(var));

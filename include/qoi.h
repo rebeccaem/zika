@@ -26,11 +26,11 @@
  /*------------------------------------------------------------------
  * Brief description of this file: 
  *
- * This is the header file from hydrogen_qoi.C. 
+ * This is the header file from src/qoi.cpp. 
  *-----------------------------------------------------------------*/
 
-#ifndef __HYDROGEN_QOI_H__
-#define __HYDROGEN_QOI_H__
+#ifndef __ZIKA_QOI_H__
+#define __ZIKA_QOI_H__
 
 #include "dynamics_info.h"
 #include <queso/GslMatrix.h>

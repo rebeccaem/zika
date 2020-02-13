@@ -3,16 +3,6 @@ import numpy as np
 from numpy import loadtxt
 
 burnin = 100;
-#dataFile = "../inputs/info.txt"
-#info = loadtxt(dataFile,comments="%")
-#n_S = int(info[0])
-#n_s = int(info[1])
-#n_phis_cal = int(info[2])
-#n_phis_val = int(info[3])
-#n_times = int(info[4])
-#var = float(info[5])
-#inad_type = int(info[6])
-
 n_s = 7
 var = 25000000
 n_weeks = 52

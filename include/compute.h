@@ -26,11 +26,11 @@
  /*------------------------------------------------------------------
  * Brief description of this file: 
  *
- * This is the header file for 'hydrogen_compute.C'. 
+ * This is the header file for 'src/compute.cpp'. 
  *-----------------------------------------------------------------*/
 
-#ifndef HYDROGEN_COMPUTE_H
-#define HYDROGEN_COMPUTE_H
+#ifndef ZIKA_COMPUTE_H
+#define ZIKA_COMPUTE_H
 
 #include <queso/Environment.h>
 

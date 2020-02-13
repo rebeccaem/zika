@@ -29,7 +29,7 @@
 #endif
 
 //first define the function for the ODE solve
-int glvFunction( double t,
+int zikaFunction( double t,
                  const double Y[],
                  double dYdt[],
                  void* params)
@@ -37,7 +37,7 @@ int glvFunction( double t,
   //here, params is sending the function all the reaction info
   dynamics_info dyn = *(dynamics_info *) params;
 
-  //model parameters:
+  //reduced model parameters:
   double bh = 1/11.3; //\beta_h
   double ah = 1/5.9;  //\alpha_h
   double g = 1/7.9;   //\gamma
@@ -53,6 +53,7 @@ int glvFunction( double t,
   const unsigned int n_deltas = pf * n_s;
   std::vector<double> delta = dyn.Deltas;
 
+  //use pops to copy ``populations'' of state variables
   std::vector<double> pops(n_s + 1,0);
   for (unsigned int i = 0; i < n_s + 1; i++){
     pops[i] = Y[i];
@@ -99,14 +100,14 @@ int glvFunction( double t,
   }
 
   if (Y[7] > 3.0e9) {
-      std::cout << "she's gonna blow!\n\n";
+      //std::cout << "she's gonna blow!\n\n";
       //throw 20;
   }
   return GSL_SUCCESS;
 }
 
 //jacobian for ode solve---------------------------------------------
-int glvJacobian( double t, 
+int zikaJacobian( double t, 
 				const double Y[],
 				double *dfdY,
 				double dfdt[],
@@ -115,7 +116,7 @@ int glvJacobian( double t,
   return GSL_SUCCESS;
 }
 
-void glvComputeModel(
+void zikaComputeModel(
   std::vector<double>&  initialValues,
   std::vector<double>&  timePoints,
   dynamics_info*        dyn,
@@ -125,8 +126,8 @@ void glvComputeModel(
   // GSL prep
   unsigned int dim = initialValues.size();
   unsigned int n_s = dim - 1;
-  gsl_odeiv2_system sys = { glvFunction, 
-			   glvJacobian, 
+  gsl_odeiv2_system sys = { zikaFunction, 
+			   zikaJacobian, 
 			   dim, dyn };
   
   double h = 1e-10;    //initial step-size
@@ -184,8 +185,8 @@ void glvComputeModel(
     for (unsigned int j = 0; j < dim; j++){
       returnValues[dim*i +j] = Y[j];}
   }
-  std::cout << "C = " << Y[7] << std::endl;
-  //std::cout << "O2 = " << Y[1] << std::endl;
+  // std::cout << "C = " << Y[7] << std::endl;
+  // std::cout << "O2 = " << Y[1] << std::endl;
   // deallocate memory
   gsl_odeiv2_driver_free( d );
 }
