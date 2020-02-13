@@ -3,7 +3,7 @@ CXX = mpic++
 SRC_DIR := src
 BUILD_DIR := build
 TARGET := bin/zika_ip
-QUESO_DIR := /Users/rem/build/queso
+QUESO_DIR := /Users/rebeccam/build/queso
 
 SRC_EXT := cpp
 SOURCES := $(shell find $(SRC_DIR) -type f -name *.$(SRC_EXT))
