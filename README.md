@@ -33,3 +33,17 @@ Notes:
 You can ignore 'americo' and 'data' directories.  
 'rep_factor' is set to 1 within src/compute.cpp, and must be changed by hand with a recompile if needed.  
 In future versions, it should be set as an input that propagates to post-processing, but this is not implemented yet.
+
+To cite this code, you can use: 
+```
+@misc{morrison2020zikacode,  
+  doi = {10.5281/ZENODO.3666845},  
+  url = {https://zenodo.org/record/3666845},  
+  author = {Morrison, Rebecca E.},  
+  title = {rebeccaem/zika: Initial release},  
+  publisher = {Zenodo},  
+  version = {0.1.0},   
+  year = {2020}  
+ }
+ ```
+ 
