@@ -80,8 +80,7 @@ int zikaFunction( double t,
   }
   else if ( inad_type == 1) {
     for (unsigned int i = 0; i < n_s; i++){
-      dYdt[i] += delta[pf*i+0]*pops[i] + delta[pf*i+1]*std::abs(dYdt[i]);
-      /* dYdt[i] += delta[pf*i+0] + delta[pf*i+1]*pops[i] + delta[pf*i+2]*std::abs(dYdt[i]); */
+      dYdt[i] += delta[pf*i+0]*pops[i] + delta[pf*i+1]*dYdt[i];
     }
   }
   else if ( inad_type == 2) {
